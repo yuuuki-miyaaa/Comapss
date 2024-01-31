@@ -8,7 +8,9 @@ use App\Models\Users\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\BulletinBoard\RequestValidate; //バリデーション用
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; //log確認用
 use DB;
 
 use App\Models\Users\Subjects;
@@ -57,10 +59,10 @@ class RegisterController extends Controller
         return view('auth.register.register', compact('subjects'));
     }
 
-    public function registerPost(RequestValidate $request)
+    public function registerPost(Request $request)
     {
         DB::beginTransaction();
-        try{
+        try {
             $old_year = $request->old_year;
             $old_month = $request->old_month;
             $old_day = $request->old_day;
@@ -83,8 +85,9 @@ class RegisterController extends Controller
             $user->subjects()->attach($subjects);
             DB::commit();
             return view('auth.login.login');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->route('loginView');
         }
     }
