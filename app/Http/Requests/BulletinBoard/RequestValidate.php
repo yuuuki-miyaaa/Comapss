@@ -57,7 +57,7 @@ class RequestValidate extends FormRequest
             'sex' => 'required|in:1,2,3',
             'role' => 'required|in:1,2,3,4',
             'birth_day' => 'required|date|after:1999-12-31|before:tomorrow',
-            'password' => 'required|max:30|min:8|confirmed',
+            'password' => 'required|min:8|max:30|confirmed',
         ];
     }
 
